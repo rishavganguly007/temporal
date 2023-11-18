@@ -28,7 +28,7 @@ require (
 	github.com/prometheus/client_golang v1.16.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/stretchr/testify v1.8.4
-	github.com/temporalio/ringpop-go v0.0.0-20230606200434-b5c079f412d3
+	github.com/temporalio/ringpop-go v0.0.0-20231118004005-c9459bb601ff
 	github.com/temporalio/sqlparser v0.0.0-20231115171017-f4060bcfa6cb
 	github.com/temporalio/tchannel-go v1.22.1-0.20220818200552-1be8d8cffa5b
 	github.com/temporalio/tctl-kit v0.0.0-20230328153839-577f95d16fa0
