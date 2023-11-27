@@ -25,6 +25,7 @@
 package temporal_test
 
 import (
+	"context"
 	"fmt"
 	"path"
 	"strings"
@@ -36,8 +37,10 @@ import (
 	"go.temporal.io/server/common/log"
 	"go.temporal.io/server/common/log/tag"
 	_ "go.temporal.io/server/common/persistence/sql/sqlplugin/sqlite" // needed to register the sqlite plugin
+	"go.temporal.io/server/service/history"
 	"go.temporal.io/server/temporal"
 	"go.temporal.io/server/tests/testutils"
+	"google.golang.org/grpc"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -56,6 +59,12 @@ func TestNewServer(t *testing.T) {
 		temporal.ForServices(temporal.DefaultServices),
 		temporal.WithConfig(cfg),
 		temporal.WithLogger(logDetector),
+		temporal.WithChainedFrontendGrpcInterceptors(func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
+			if _, ok := info.Server.(*history.Handler); ok {
+				panic("oops")
+			}
+			return handler(ctx, req)
+		}),
 	)
 	require.NoError(t, err)
 	t.Cleanup(func() {
