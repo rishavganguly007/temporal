@@ -2585,7 +2585,7 @@ func (mr *MockMutableStateMockRecorder) ReplicateWorkflowTaskTimedOutEvent(arg0 
 }
 
 // RetryActivity mocks base method.
-func (m *MockMutableState) RetryActivity(ai *v112.ActivityInfo, failure *v12.Failure, calculator BackoffIntervalCalculator) (v11.RetryState, error) {
+func (m *MockMutableState) RetryActivity(ai *v112.ActivityInfo, failure *v12.Failure, calculator BackoffIntervalCalculatorFunc) (v11.RetryState, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RetryActivity", ai, failure, calculator)
 	ret0, _ := ret[0].(v11.RetryState)
