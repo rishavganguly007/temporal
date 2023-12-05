@@ -15,7 +15,7 @@ ci-build-misc: print-go-version ci-update-tools proto bins shell-check copyright
 clean: clean-bins clean-test-results
 
 # Recompile proto files.
-proto: clean-proto buf-lint api-linter protoc goimports-proto proto-mocks copyright-proto
+proto: buf-lint api-linter protoc goimports-proto proto-mocks copyright-proto
 
 # Update proto submodule from remote and recompile proto files.
 update-proto: clean-proto update-proto-submodule buf-lint api-linter protoc update-go-api goimports-proto proto-mocks copyright-proto gomodtidy
@@ -184,8 +184,8 @@ install-proto-submodule:
 	@printf $(COLOR) "Install proto submodule..."
 	git submodule update --init $(PROTO_ROOT)/api
 
-protoc: $(PROTO_OUT)
-	@./protoc.sh
+protoc: $(PROTO_OUT) clean-proto
+	@protogen --include=proto/api,proto/dependencies --root=proto/internal --rewrite-enum=BuildId_State:BuildId compile
 
 # All gRPC generated service files pathes relative to PROTO_OUT.
 PROTO_GRPC_SERVICES = $(patsubst $(PROTO_OUT)/%,%,$(shell find $(PROTO_OUT) -name "service.pb.go" -o -name "service_grpc.pb.go"))
