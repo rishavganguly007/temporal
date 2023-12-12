@@ -64,6 +64,7 @@ import (
 	"go.temporal.io/server/common/searchattribute"
 	"go.temporal.io/server/common/tqname"
 	"go.temporal.io/server/common/worker_versioning"
+	api "go.temporal.io/server/service/history/api/common"
 	"go.temporal.io/server/service/history/configs"
 	"go.temporal.io/server/service/history/events"
 	"go.temporal.io/server/service/history/shard"
@@ -1129,7 +1130,7 @@ func (s *mutableStateSuite) TestRetryActivity_TruncateRetryableFailure() {
 	}
 	s.Greater(activityFailure.Size(), failureSizeErrorLimit)
 
-	retryState, err := s.mutableState.RetryActivity(activityInfo, activityFailure, RequestedDelay{})
+	retryState, err := s.mutableState.RetryActivity(activityInfo, activityFailure, api.RequestedDelay{})
 	s.NoError(err)
 	s.Equal(enumspb.RETRY_STATE_IN_PROGRESS, retryState)
 

@@ -36,11 +36,8 @@ import (
 	"go.temporal.io/server/api/persistence/v1"
 	"go.temporal.io/server/common"
 	"go.temporal.io/server/common/clock"
+	api "go.temporal.io/server/service/history/api/common"
 )
-
-type RequestedDelay struct {
-	Interval *time.Duration
-}
 
 type ActivityVisitor interface {
 	UpdateActivityInfo(ai *persistence.ActivityInfo, version int64, failure *failurepb.Failure) *persistence.ActivityInfo
@@ -55,7 +52,7 @@ type retryableActivityVisitor struct {
 	ai                *persistence.ActivityInfo
 	nextScheduledTime time.Time
 	timesource        clock.TimeSource
-	delay             RequestedDelay
+	delay             api.RequestedDelay
 	state             enumspb.RetryState
 }
 
@@ -63,7 +60,7 @@ func newActivityVisitor(
 	ai *persistence.ActivityInfo,
 	failure *failurepb.Failure,
 	timesource clock.TimeSource,
-	delay RequestedDelay,
+	delay api.RequestedDelay,
 ) ActivityVisitor {
 	if !ai.HasRetryPolicy {
 		return &nonRetryableActivityVisitor{state: enumspb.RETRY_STATE_RETRY_POLICY_NOT_SET}
@@ -124,7 +121,7 @@ func (ra *retryableActivityVisitor) UpdateActivityInfo(ai *persistence.ActivityI
 	return ai
 }
 
-func makeBackoffAlgorithm(delay RequestedDelay) BackoffCalculatorAlgorithmFunc {
+func makeBackoffAlgorithm(delay api.RequestedDelay) BackoffCalculatorAlgorithmFunc {
 	return func(duration *durationpb.Duration, coefficient float64, currentAttempt int32) time.Duration {
 		if delay.Interval != nil {
 			return *delay.Interval

@@ -69,6 +69,7 @@ import (
 	"go.temporal.io/server/common/primitives/timestamp"
 	"go.temporal.io/server/common/searchattribute"
 	"go.temporal.io/server/common/worker_versioning"
+	api "go.temporal.io/server/service/history/api/common"
 	"go.temporal.io/server/service/history/configs"
 	"go.temporal.io/server/service/history/consts"
 	"go.temporal.io/server/service/history/events"
@@ -4230,7 +4231,7 @@ func (ms *MutableStateImpl) ReplicateChildWorkflowExecutionTimedOutEvent(
 func (ms *MutableStateImpl) RetryActivity(
 	ai *persistencespb.ActivityInfo,
 	failure *failurepb.Failure,
-	delay RequestedDelay,
+	delay api.RequestedDelay,
 ) (enumspb.RetryState, error) {
 
 	opTag := tag.WorkflowActionActivityTaskRetry

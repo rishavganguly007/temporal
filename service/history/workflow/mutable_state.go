@@ -52,6 +52,7 @@ import (
 	"go.temporal.io/server/common/definition"
 	"go.temporal.io/server/common/namespace"
 	"go.temporal.io/server/common/persistence"
+	api "go.temporal.io/server/service/history/api/common"
 	"go.temporal.io/server/service/history/tasks"
 )
 
@@ -163,7 +164,7 @@ type (
 
 		CheckResettable() error
 		CloneToProto() *persistencespb.WorkflowMutableState
-		RetryActivity(ai *persistencespb.ActivityInfo, failure *failurepb.Failure, delay RequestedDelay) (enumspb.RetryState, error)
+		RetryActivity(ai *persistencespb.ActivityInfo, failure *failurepb.Failure, delay api.RequestedDelay) (enumspb.RetryState, error)
 		GetTransientWorkflowTaskInfo(workflowTask *WorkflowTaskInfo, identity string) *historyspb.TransientWorkflowTaskInfo
 		DeleteSignalRequested(requestID string)
 		FlushBufferedEvents()
